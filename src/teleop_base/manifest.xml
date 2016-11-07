@@ -1,0 +1,17 @@
+<package>
+  <author>Morgan Quigley and Brian Gerkey</author>
+  <description>
+Teleoperation of a robot from keyboard and joystick.
+  </description>
+  <license>BSD</license>
+  <review status="deprecated" notes="Use pr2_teleop"/>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+  <depend package="std_msgs"/>
+  <depend package="nav_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="tf" />
+  <platform os="ubuntu" version="9.04"/>
+  <platform os="ubuntu" version="9.10"/>
+  <platform os="ubuntu" version="10.04"/>
+</package>
