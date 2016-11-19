@@ -92,7 +92,8 @@ public:
       int  y2,
 	  char value)
   {
-	  float  ratio  = canvas.rows / 50.0 ;
+	  //float  ratio  = canvas.rows / 50.0 ;
+	  float ratio = 100.0/RESOLUTION ;
 	  x1 = x1*ratio ;
 	  y1 = y1*ratio ;
 	  x2 = x2*ratio ;
@@ -158,7 +159,7 @@ public:
     // TODO: parse laser data and update occupancy grid canvas
     //       (use CELL_OCCUPIED, CELL_UNKNOWN, CELL_FREE, and CELL_ROBOT values)
     // (see http://www.ros.org/doc/api/sensor_msgs/html/msg/LaserScan.html)
-	  float  ratio  = canvas.rows / 50.0 ;
+	  float ratio = 100.0/RESOLUTION ;
 	  const std::vector<float> &allRange = msg->ranges ;
 
 	  for( int i = 0 ; i< allRange.size() ; i++ ){
@@ -219,18 +220,33 @@ public:
         break;
       } else if (key == ' ') {
         saveSnapshot();
+      } else if( key == 'c'){
+    	clearCanvas();
       }
     }
     
     ros::shutdown(); // Ensure that this ROS node shuts down properly
   };
 
+  void clearCanvas() {
+    canvasMutex.lock();
+
+    for( int i = 0 ; i< canvas.rows ; i++ )
+    	for( int j = 0 ; j< canvas.cols ; j++ ){
+    		canvas.at<char>(i, j) =  CELL_UNKNOWN ;
+    	}
+    canvasMutex.unlock();
+  };
+
   // Tunable motion controller parameters
   const static double FORWARD_SPEED_MPS = 2.0;
   const static double ROTATE_SPEED_RADPS = M_PI/2;
+  const static double RESOLUTION = 5.0 ;
+
   
   const static int SPIN_RATE_HZ = 30;
   
+
   const static char CELL_OCCUPIED = 0;
   const static char CELL_UNKNOWN = 86;
   const static char CELL_FREE = 172;
