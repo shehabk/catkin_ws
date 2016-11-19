@@ -160,9 +160,12 @@ public:
     //       (use CELL_OCCUPIED, CELL_UNKNOWN, CELL_FREE, and CELL_ROBOT values)
     // (see http://www.ros.org/doc/api/sensor_msgs/html/msg/LaserScan.html)
 	  float ratio = 100.0/RESOLUTION ;
-	  const std::vector<float> &allRange = msg->ranges ;
 
-	  for( int i = 0 ; i< allRange.size() ; i++ ){
+	  const std::vector<float> &allRange = msg->ranges ;
+	  unsigned int minIndex = ceil((MIN_SCAN_ANGLE_RAD - msg->angle_min) / msg->angle_increment);
+	  unsigned int maxIndex = ceil((MAX_SCAN_ANGLE_RAD - msg->angle_min) / msg->angle_increment);
+
+	  for (unsigned int i = minIndex + 1; i < maxIndex; i++) {
 		  float cur_range = allRange[i];
 		  if( cur_range > msg->range_min){
 			  float angle = heading + msg->angle_min + i* msg->angle_increment ;
@@ -242,6 +245,9 @@ public:
   const static double FORWARD_SPEED_MPS = 2.0;
   const static double ROTATE_SPEED_RADPS = M_PI/2;
   const static double RESOLUTION = 5.0 ;
+
+  const static double MIN_SCAN_ANGLE_RAD = -30.0/180*M_PI;
+  const static double MAX_SCAN_ANGLE_RAD = +30.0/180*M_PI;
 
   
   const static int SPIN_RATE_HZ = 30;

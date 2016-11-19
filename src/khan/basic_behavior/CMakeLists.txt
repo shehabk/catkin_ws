@@ -164,6 +164,8 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(basic_behavior src/basic_behavior.cpp)
 add_executable(basic_behavior_sim src/basic_behavior_sim.cpp)
+add_executable(basic_command src/basic_command.cpp)
 target_link_libraries(basic_behavior ${catkin_LIBRARIES})
 target_link_libraries(basic_behavior_sim ${catkin_LIBRARIES})
+target_link_libraries(basic_command ${catkin_LIBRARIES})
 add_dependencies(basic_behavior beginner_tutorials_generate_messages_cpp)
