@@ -1,7 +1,11 @@
 #include "ros/ros.h"
+#include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
 #include "std_msgs/String.h"
+#include <tf/transform_listener.h>
+#include <boost/thread/mutex.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <cstdlib> // Needed for rand()
 #include <ctime> // Needed to seed random number generator with a time value
 
@@ -25,6 +29,8 @@ class BasicBehavior {
 			// this->commandCallback() whenever a new message is published on that topic
 			laserSub = nh.subscribe("base_scan", 1, &BasicBehavior::commandCallback, this);
 			commandListener =  nh.subscribe("command", 1, &BasicBehavior::commandListenerCallback, this);
+		    poseSub = nh.subscribe("base_pose_ground_truth", 1, \
+		      &BasicBehavior::poseCallback, this);
 	};
 
 
@@ -40,6 +46,7 @@ class BasicBehavior {
 		ros::Time transStart;  // Start time of the rotation
 		ros::Duration transDuration;  // Duration of the rotation
 		transStart = ros::Time::now();
+		d= d + .02 ;
 		transDuration = ros::Duration( d/FORWARD_SPEED_MPS );
 		ros::Rate transRate(SPIN_RATE);
 		while(true){
@@ -55,6 +62,7 @@ class BasicBehavior {
 
 	void rotate_rel(double d ){
 		double radAngle = (d*M_PI)/180.0 ;
+		radAngle  *= (90/91.12);
 		ros::Time rotStart;  // Start time of the rotation
 		ros::Duration rotDuration;  // Duration of the rotation
 		rotStart = ros::Time::now();
@@ -70,6 +78,16 @@ class BasicBehavior {
 		}
 	}
 
+	void squareMove(){
+		translate(1);
+		rotate_rel(90);
+		translate(1);
+		rotate_rel(90);
+		translate(1);
+		rotate_rel(90);
+		translate(1);
+	}
+
 	void commandListenerCallback(const std_msgs::String::ConstPtr& msg){
 	    ROS_INFO("I heard: [%s]", msg->data.c_str());
 	    string messageStr   = msg->data.c_str() ;
@@ -83,10 +101,19 @@ class BasicBehavior {
 	    	translate(val);
 	    } else if (cmd.compare("rotate") == 0 ){
 	    	ss>>val ;
-	    	ROS_INFO("I rotate: [%f]",val);
 	    	rotate_rel(val);
+	    } else if (cmd.compare("square") == 0 ){
+	    	squareMove();
 	    }
 	}
+
+	void poseCallback(const nav_msgs::Odometry::ConstPtr& msg) {
+	    double roll, pitch;
+	    x = -msg->pose.pose.position.y;
+	    y = msg->pose.pose.position.x;
+	    heading=tf::getYaw(msg->pose.pose.orientation);
+	    //ROS_INFO("Drawing line  %.3f %.3f %.3f",x , y  ,heading*180 / 3.1416);
+	 }
 		// Process the incoming laser scan message
 	void commandCallback(const sensor_msgs::LaserScan::ConstPtr& msg) {
 		if (fsm == FSM_MOVE_FORWARD) {
@@ -192,6 +219,14 @@ class BasicBehavior {
 		ros::Publisher commandPub; // Publisher to the simulated robot's velocity command topic
 		ros::Subscriber laserSub; // Subscriber to the simulated robot's laser scan topic
 		ros::Subscriber commandListener;
+		ros::Subscriber poseSub; // Subscriber to the current robot's ground truth pose topic
+		ros::Subscriber poseSubCombined ;
+
+		double x; // in simulated Stage units, + = East/right
+		double y; // in simulated Stage units, + = North/up
+		double heading; // in radians, 0 = East (+x dir.), pi/2 = North (+y dir.)
+
+
 		enum FSM fsm; // Finite state machine for the random walk algorithm
 		ros::Time rotateStartTime; // Start time of the rotation
 		ros::Duration rotateDuration; // Duration of the rotation
@@ -201,7 +236,7 @@ class BasicBehavior {
 
 
 int main(int argc, char **argv) {
-	ros::init(argc, argv, "random_walk"); // Initiate new ROS node named "random_walk"
+	ros::init(argc, argv, "basic_behavior"); // Initiate new ROS node named "random_walk"
 	ros::NodeHandle n;
 	BasicBehavior walker(n); // Create new random walk object
 	walker.spin(); // Execute FSM loopreturn 0;
