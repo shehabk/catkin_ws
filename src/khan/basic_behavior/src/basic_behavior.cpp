@@ -9,6 +9,10 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <cstdlib> // Needed for rand()
 #include <ctime> // Needed to seed random number generator with a time value
+#include <iostream>
+#include <fstream>
+
+
 
 using namespace std ;
 
@@ -95,7 +99,8 @@ class BasicBehavior {
 	    string messageStr   = msg->data.c_str() ;
 	    string cmd ;
 	    double val ;
-
+		ofstream outfile;
+		outfile.open("testData.txt", std::ios_base::app);
 	    stringstream ss(messageStr) ;
 	    ss>> cmd  ;
 	    if(cmd.compare("translate") == 0 ){
@@ -106,7 +111,61 @@ class BasicBehavior {
 	    	rotate_rel(val);
 	    } else if (cmd.compare("square") == 0 ){
 	    	squareMove();
+	    } else if(cmd.compare("lineartest") == 0){
+	    	double oldX=x;
+			double oldY=y;
+			double oldXCom=xCom;
+			double oldYCom=yCom;
+
+			outfile<<"linearTest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+
+			translate(1);
+			outfile<<"linearTest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
+			outfile<<"Distance Odom: "<<distance(oldX,oldY,x,y)<<endl;
+			outfile<<"Distance OdomCom: "<<distance(oldXCom,oldYCom,xCom,yCom)<<endl;
+
+	    } else if(cmd.compare("rotationtest") == 0){
+			double oldX=x;
+			double oldY=y;
+			double oldXCom=xCom;
+			double oldYCom=yCom;
+			outfile<<"rotationtest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+			rotate_rel(30);
+			outfile<<"rotationtest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
+			outfile<<"Distance Odom: "<<distance(oldX,oldY,x,y)<<endl;
+			outfile<<"Distance OdomCom: "<<distance(oldXCom,oldYCom,xCom,yCom)<<endl;
+
+	    } else if(cmd.compare("squaretest") == 0){
+			double oldX=x;
+			double oldY=y;
+			double oldXCom=xCom;
+			double oldYCom=yCom;
+			outfile<<"squaretest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+			squareMove();
+			outfile<<"squaretest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
+			outfile<<"Distance Odom: "<<distance(oldX,oldY,x,y)<<endl;
+			outfile<<"Distance OdomCom: "<<distance(oldXCom,oldYCom,xCom,yCom)<<endl;
 	    }
+
+	    outfile.close();
+	}
+	double distance(double x1, double y1, double x2, double y2){
+		double dX=x1-x2;
+		double dY=y1-y2;
+		return sqrt(dX*dX+dY*dY);
+
 	}
 
 	void poseCallback(const nav_msgs::Odometry::ConstPtr& msg) {

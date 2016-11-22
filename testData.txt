@@ -1,0 +1,72 @@
+linearTest Starting
+Odom -0.782435 -0.725538 -2.88398
+OdomCombined -0.782435 9.88131e-324 
+linearTest Ending
+Odom -0.782435 -0.725538 -2.88398
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+linearTest Starting
+Odom -0.561633 -1.56904 -2.84506
+OdomCombined -0.561633 9.88131e-324 
+linearTest Ending
+Odom -0.561633 -1.56904 -2.84506
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+linearTest Starting
+Odom -0.280037 -2.48767 -2.81539
+OdomCombined -0.280037 9.88131e-324 
+linearTest Ending
+Odom -0.280037 -2.48767 -2.81539
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+rotationtest Starting
+Odom 0.0579688 -3.49308 -2.7824
+OdomCombined 0.0579688 9.88131e-324 
+rotationtest Ending
+Odom 0.0579688 -3.49308 -2.7824
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+rotationtest Starting
+Odom 0.0590172 -3.49551 -2.78467
+OdomCombined 0.0590172 9.88131e-324 
+rotationtest Ending
+Odom 0.0590172 -3.49551 -2.78467
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+rotationtest Starting
+Odom 0.0586113 -3.49535 -2.74697
+OdomCombined 0.0586113 9.88131e-324 
+rotationtest Ending
+Odom 0.0586113 -3.49535 -2.74697
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+squaretest Starting
+Odom 0.0604716 -3.4961 -2.73423
+OdomCombined 0.0604716 9.88131e-324 
+squaretest Ending
+Odom 0.0604716 -3.4961 -2.73423
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+squaretest Starting
+Odom 0.231669 -3.19708 -2.71067
+OdomCombined 0.231669 9.88131e-324 
+squaretest Ending
+Odom 0.231669 -3.19708 -2.71067
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0
+squaretest Starting
+Odom 0.345669 -2.94747 -2.66547
+OdomCombined 0.345669 9.88131e-324 
+squaretest Ending
+Odom 0.345669 -2.94747 -2.66547
+OdomCombined 2.20573e-317 9.88131e-324 
+Distance Odom: 0
+Distance OdomCom: 0

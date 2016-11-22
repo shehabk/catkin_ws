@@ -8,6 +8,8 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <cstdlib> // Needed for rand()
 #include <ctime> // Needed to seed random number generator with a time value
+#include <iostream>
+#include <fstream>
 
 using namespace std ;
 
@@ -93,7 +95,8 @@ class BasicBehavior {
 	    string messageStr   = msg->data.c_str() ;
 	    string cmd ;
 	    double val ;
-
+		ofstream outfile;
+		outfile.open("testData.txt", std::ios_base::app);
 	    stringstream ss(messageStr) ;
 	    ss>> cmd  ;
 	    if(cmd.compare("translate") == 0 ){
@@ -104,7 +107,35 @@ class BasicBehavior {
 	    	rotate_rel(val);
 	    } else if (cmd.compare("square") == 0 ){
 	    	squareMove();
+	    } else if(cmd.compare("lineartest") == 0){
+			outfile<<"linearTest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+			translate(1);
+			outfile<<"linearTest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
+
+	    } else if(cmd.compare("rotationtest") == 0){
+			outfile<<"rotationtest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+			rotate_rel(30);
+			outfile<<"rotationtest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
+
+	    } else if(cmd.compare("squaretest") == 0){
+			outfile<<"squaretest Starting"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
+			squareMove();
+			outfile<<"squaretest Ending"<<endl ;
+			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
+			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;
 	    }
+
+	    outfile.close();
 	}
 
 	void poseCallback(const nav_msgs::Odometry::ConstPtr& msg) {
@@ -226,6 +257,9 @@ class BasicBehavior {
 		double y; // in simulated Stage units, + = North/up
 		double heading; // in radians, 0 = East (+x dir.), pi/2 = North (+y dir.)
 
+		double xCom; // in simulated Stage units, + = East/right
+		double yCom; // in simulated Stage units, + = North/up
+		double headingCom; // in radians, 0 = East (+x dir.), pi/2 = North (+y dir.)
 
 		enum FSM fsm; // Finite state machine for the random walk algorithm
 		ros::Time rotateStartTime; // Start time of the rotation
