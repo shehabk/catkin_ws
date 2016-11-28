@@ -28,12 +28,12 @@ public:
     // velocity command topic (the second argument indicates that
     // if multiple command messages are in the queue to be sent,
     // only the last command will be sent)
-    commandPub = nh.advertise<geometry_msgs::Twist>("cmd_vel_mux/input/teleop", 1);
+    commandPub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
     // Subscribe to the current simulated robot's laser scan topic and
     // tell ROS to call this->laserCallback() whenever a new message
     // is published on that topic
-    laserSub = nh.subscribe("scan", 1, \
+    laserSub = nh.subscribe("base_scan", 1, \
       &GridMapper::laserCallback, this);
     
     // Subscribe to the current simulated robot' ground truth pose topic
@@ -82,8 +82,8 @@ public:
   void move(double linearVelMPS, double angularVelRadPS) {
     geometry_msgs::Twist msg; // The default constructor will set all commands to 0
     msg.linear.x = linearVelMPS;
-    msg.angular.z = angularVelRadPS ;
-    commandPub.publish(msg) ;
+    msg.angular.z = angularVelRadPS;
+    commandPub.publish(msg);
   };
 //http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
   void drawLine(int x1,
