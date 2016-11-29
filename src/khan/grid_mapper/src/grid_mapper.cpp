@@ -39,7 +39,7 @@ public:
     // Subscribe to the current simulated robot' ground truth pose topic
     // and tell ROS to call this->poseCallback(...) whenever a new
     // message is published on that topic
-    poseSub = nh.subscribe("base_pose_ground_truth", 1, \
+    poseSub = nh.subscribe("odom", 1, \
       &GridMapper::poseCallback, this);
       
     // Create resizeable named window
@@ -164,17 +164,20 @@ public:
 	  const std::vector<float> &allRange = msg->ranges ;
 	  unsigned int minIndex = ceil((MIN_SCAN_ANGLE_RAD - msg->angle_min) / msg->angle_increment);
 	  unsigned int maxIndex = ceil((MAX_SCAN_ANGLE_RAD - msg->angle_min) / msg->angle_increment);
-
-	  for (unsigned int i = minIndex + 1; i < maxIndex; i++) {
+	  //ROS_INFO("Drawing line %u %u ",  minIndex ,  maxIndex  );
+	  for (unsigned int i = 0 ; i < allRange.size(); i++) {
 		  float cur_range = allRange[i];
-		  if( cur_range > msg->range_min){
+		  //ROS_INFO("Drawing line %.3f",  cur_range );
+		  if( cur_range > rangeMin){
 			  float angle = heading + msg->angle_min + i* msg->angle_increment ;
 			  float xprojection = cur_range*cos(angle);
 			  float yprojection = cur_range*sin(angle);
 
+			 // ROS_INFO("Drawing line  %.3f %.3f %.3f %.3f",x , y  ,x - yprojection , y + xprojection );
+
 			  drawLine(x, y , x - yprojection, y + xprojection, CELL_FREE );
 
-			  if(cur_range < msg->range_max){
+			  if(cur_range < rangeMax){
 				  plot(floor((x-yprojection)*ratio), floor((y+xprojection)*ratio), CELL_OCCUPIED );
 			  }
 
@@ -191,7 +194,7 @@ public:
     x = -msg->pose.pose.position.y;
     y = msg->pose.pose.position.x;
     heading=tf::getYaw(msg->pose.pose.orientation);
-    ROS_INFO("Drawing line  %.3f %.3f %.3f",x , y  ,heading*180 / 3.1416);
+    //ROS_INFO("Drawing line  %.3f %.3f %.3f",x , y  ,heading*180 / 3.1416);
   };
   
   
@@ -249,7 +252,8 @@ public:
   const static double MIN_SCAN_ANGLE_RAD = -30.0/180*M_PI;
   const static double MAX_SCAN_ANGLE_RAD = +30.0/180*M_PI;
 
-  
+  const static double rangeMax = 5 ;
+  const static double rangeMin = .2 ;
   const static int SPIN_RATE_HZ = 30;
   
 
