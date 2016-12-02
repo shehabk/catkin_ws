@@ -61,6 +61,7 @@ class BasicBehavior {
 				move(0,0);
 				break ;
 			}
+			ros::spinOnce();
 			transRate.sleep();
 		}
 
@@ -79,6 +80,7 @@ class BasicBehavior {
 				move(0,0);
 				break ;
 			}
+			ros::spinOnce();
 			rotRate.sleep();
 		}
 	}
