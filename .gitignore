@@ -1,5 +1,6 @@
 build/*
 devel/*
+bagFiles/*
 .catkin_workspace
 src/Worlds/*
 src/Worlds_back/*

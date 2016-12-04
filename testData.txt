@@ -6,3 +6,21 @@ Odom -0.00453542 0.0963514 0.0270526
 OdomCombined 2.20573e-317 9.88131e-324 
 Distance Odom: 0.0263979
 Distance OdomCom: 0
+squaretest Starting
+Odom -13.2745 6.55431 0
+OdomCombined -13.2745 9.88131e-324 
+squaretest Ending
+Odom -13.2745 6.55431 0
+OdomCombined 2.18249e-317 9.88131e-324 
+squaretest Starting
+Odom -13.3161 6.51507 -1.6297
+OdomCombined -13.3161 9.88131e-324 
+squaretest Ending
+Odom -13.3161 6.51507 -1.6297
+OdomCombined 2.18249e-317 9.88131e-324 
+squaretest Starting
+Odom -13.1215 17.5006 -3.06305
+OdomCombined -13.1215 9.88131e-324 
+squaretest Ending
+Odom -13.1215 17.5006 -3.06305
+OdomCombined 2.18249e-317 9.88131e-324 
