@@ -123,7 +123,7 @@ class BasicBehavior {
 			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
 			outfile<<"OdomCombined" <<" "<< x << " " << yCom << " "<< endl ;
 
-			translate(1);
+			translate(0.1);
 			outfile<<"linearTest Ending"<<endl ;
 			outfile<<"Odom" <<" "<< x << " " << y << " " << heading <<  endl ;
 			outfile<<"OdomCombined" <<" "<< xCom << " " << yCom << " "<< endl ;

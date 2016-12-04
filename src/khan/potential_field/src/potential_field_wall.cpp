@@ -7,7 +7,7 @@
 #include <ctime> // Needed to seed random number generator with a time value
 #include <tf/LinearMath/Quaternion.h> // Needed to convert rotation ...
 #include <tf/LinearMath/Matrix3x3.h>  // ... quaternion into Euler angles
-#include <tf/transform_listener.h>
+
 
 
 /*
@@ -97,7 +97,7 @@ struct Pose {
     double roll, pitch;
     x = msg->pose.pose.position.x;
     y = msg->pose.pose.position.y;
-
+    //heading=tf::getYaw(msg->pose.pose.orientation);
     tf::Quaternion q = tf::Quaternion(msg->pose.pose.orientation.x, \
       msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, \
       msg->pose.pose.orientation.w);
@@ -193,8 +193,10 @@ public:
    * Function to calculate the resultant force.
    */
   vector2d getAttractiveForce(){
-
-
+      vector2d headingV = vector2d(cos(pose[ID].heading) , sin(pose[ID].heading));
+      vector2d goalDirection = rotate(headingV, -M_PI /3.5 ) ;
+      goalX = pose[ID].x + 100*goalDirection.x ;
+      goalY = pose[ID].y + 100*goalDirection.y ;
       double attractiveX = (goalX - pose[ID].x);
       double attractiveY = (goalY - pose[ID].y);
       double attractiveMag = gamma * sqrt(pow((goalY - pose[ID].y),2) + pow((goalX - pose[ID].x),2));
@@ -319,7 +321,7 @@ public:
 //        std::cout << i << "        ";
 //        std::cout << "Pose: " << pose[i].x << ", " << pose[i].y << ", " << pose[i].heading << std::endl;
 //      }
-      updatLocalMinima();
+      //updatLocalMinima();
       vector2d resultantForce = calculateResultantForce();
       makeMove(resultantForce);
 
@@ -334,14 +336,14 @@ public:
   const static double FORWARD_SPEED_MPS = 2.0;
   const static double ROTATE_SPEED_RADPS = M_PI/2;
   const static float velLinMin = 0;
-  const static float velLinMax = 20;
+  const static float velLinMax = 2;
   const static float velAngMin = -M_PI/2.0;
   const static float velAngMax = M_PI/2.0;
   const static double alpha = 1;
   const static double gamma = 2;
   const static double beta = 4; //meters
   const static double epsilon = 0.05; //meters
-  const static double dSafe = .5; //Meters
+  const static double dSafe = .2; //Meters
   const static float kpAng = .4;
   const static float kpLin = 1;
   const static double localMinThresh = 0.3 ;
